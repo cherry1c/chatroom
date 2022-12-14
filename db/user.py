@@ -1,4 +1,5 @@
-import start
+# import  start
+import db.start as start
 
 
 class User:
@@ -19,7 +20,7 @@ def add_user(user_input):
     user.gender = user_input.gender
     user.net_address = user_input.net_address
     user.address = user_input.address
-
+    user.status = 1
     session = start.Session()
 
     session.add(user)
@@ -35,9 +36,7 @@ def test_add():
 def get_user(name):
     session = start.Session()
     user = start.user
-    print(user)
-    result = session.query(user).filter(user.name == name).one()
-    print(result)
+    result = session.query(user).filter(user.name == name).all()
     return result
 
 
@@ -45,5 +44,4 @@ def test_get():
     user = get_user("chenyi")
     print(user.name, user.password)
 
-
-test_get()
+# get_user("chenyi")

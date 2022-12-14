@@ -13,7 +13,7 @@ if __name__ == '__main__':
     loginDlg = QDialog()
     loginUI = login.Ui_Dialog()
 
-    loginUI.setupUi(loginDlg, myDlg)
+    loginUI.setupUi(loginDlg, myUI)
     loginDlg.show()
 
     sys.exit(myapp.exec_())
