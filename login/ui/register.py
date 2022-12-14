@@ -12,12 +12,11 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_Dialog(object):
-    def setupUi(self, Dialog, client):
+    def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(609, 375)
-        self.Dialog = Dialog
         self.pbn_register = QtWidgets.QPushButton(Dialog)
-        self.pbn_register.setGeometry(QtCore.QRect(200, 240, 121, 31))
+        self.pbn_register.setGeometry(QtCore.QRect(250, 260, 75, 23))
         self.pbn_register.setObjectName("pbn_register")
         self.layoutWidget = QtWidgets.QWidget(Dialog)
         self.layoutWidget.setGeometry(QtCore.QRect(190, 100, 177, 22))
@@ -29,7 +28,6 @@ class Ui_Dialog(object):
         self.label_2.setObjectName("label_2")
         self.horizontalLayout_2.addWidget(self.label_2)
         self.line_edit_password = QtWidgets.QLineEdit(self.layoutWidget)
-        self.line_edit_password.setEchoMode(QtWidgets.QLineEdit.Password)
         self.line_edit_password.setObjectName("line_edit_password")
         self.horizontalLayout_2.addWidget(self.line_edit_password)
         self.layoutWidget_2 = QtWidgets.QWidget(Dialog)
@@ -56,62 +54,41 @@ class Ui_Dialog(object):
         self.line_edit_address = QtWidgets.QLineEdit(self.layoutWidget_4)
         self.line_edit_address.setObjectName("line_edit_address")
         self.horizontalLayout_5.addWidget(self.line_edit_address)
-        self.layoutWidget1 = QtWidgets.QWidget(Dialog)
-        self.layoutWidget1.setGeometry(QtCore.QRect(190, 70, 177, 22))
-        self.layoutWidget1.setObjectName("layoutWidget1")
-        self.horizontalLayout = QtWidgets.QHBoxLayout(self.layoutWidget1)
+        self.widget = QtWidgets.QWidget(Dialog)
+        self.widget.setGeometry(QtCore.QRect(190, 70, 177, 22))
+        self.widget.setObjectName("widget")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.widget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.label = QtWidgets.QLabel(self.layoutWidget1)
+        self.label = QtWidgets.QLabel(self.widget)
         self.label.setObjectName("label")
         self.horizontalLayout.addWidget(self.label)
-        self.line_edit_name = QtWidgets.QLineEdit(self.layoutWidget1)
+        self.line_edit_name = QtWidgets.QLineEdit(self.widget)
         self.line_edit_name.setObjectName("line_edit_name")
         self.horizontalLayout.addWidget(self.line_edit_name)
-        self.layoutWidget2 = QtWidgets.QWidget(Dialog)
-        self.layoutWidget2.setGeometry(QtCore.QRect(191, 170, 108, 18))
-        self.layoutWidget2.setObjectName("layoutWidget2")
-        self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.layoutWidget2)
+        self.widget1 = QtWidgets.QWidget(Dialog)
+        self.widget1.setGeometry(QtCore.QRect(191, 170, 108, 18))
+        self.widget1.setObjectName("widget1")
+        self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.widget1)
         self.horizontalLayout_4.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
-        self.label_4 = QtWidgets.QLabel(self.layoutWidget2)
+        self.label_4 = QtWidgets.QLabel(self.widget1)
         self.label_4.setObjectName("label_4")
         self.horizontalLayout_4.addWidget(self.label_4)
-        self.radio_button_man = QtWidgets.QRadioButton(self.layoutWidget2)
-        self.radio_button_man.setEnabled(True)
+        self.radio_button_man = QtWidgets.QRadioButton(self.widget1)
         self.radio_button_man.setObjectName("radio_button_man")
         self.horizontalLayout_4.addWidget(self.radio_button_man)
-        self.radio_button_woman = QtWidgets.QRadioButton(self.layoutWidget2)
+        self.radio_button_woman = QtWidgets.QRadioButton(self.widget1)
         self.radio_button_woman.setObjectName("radio_button_woman")
         self.horizontalLayout_4.addWidget(self.radio_button_woman)
-
-        self.client = client
-
-        self.pbn_register.clicked.connect(self.register_login)
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
-    def register_login(self):
-        gender = 0
-        if self.radio_button_man.isChecked():
-            gender = "男"
-        elif self.radio_button_woman.isChecked():
-            gender = "女"
-        user = dict()
-        user["name"] = self.line_edit_name.text()
-        user["password"] = self.line_edit_password.text()
-        user["age"] = int(self.line_edit_age.text())
-
-        user["gender"] = gender
-        user["address"] = self.line_edit_address.text()
-        self.Dialog.hide()
-        self.client.register_login(user)
-
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.pbn_register.setText(_translate("Dialog", "注册并登录"))
+        self.pbn_register.setText(_translate("Dialog", "注册"))
         self.label_2.setText(_translate("Dialog", "密码"))
         self.label_3.setText(_translate("Dialog", "年龄"))
         self.label_5.setText(_translate("Dialog", "地址"))

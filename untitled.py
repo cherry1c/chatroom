@@ -10,19 +10,11 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import socket
 from MyThread import Thread
-import json
 
 
 ip = "172.20.10.5"
 port = 6666
 selfPort = 8888
-
-send_data = {
-    "type": "",
-    "name": "",
-    "status": 0,
-    "data": ""
-}
 
 
 class Ui_Dialog(object):
@@ -32,7 +24,6 @@ class Ui_Dialog(object):
         font = QtGui.QFont()
         font.setPointSize(14)
         Dialog.setFont(font)
-        self.Dialog = Dialog
         self.textEdit = QtWidgets.QTextEdit(Dialog)
         self.textEdit.setGeometry(QtCore.QRect(40, 30, 491, 451))
         self.textEdit.setObjectName("textEdit")
@@ -51,13 +42,10 @@ class Ui_Dialog(object):
         self.pushButton_2 = QtWidgets.QPushButton(Dialog)
         self.pushButton_2.setGeometry(QtCore.QRect(290, 580, 91, 31))
         self.pushButton_2.setObjectName("pushButton_2")
-        self.lineEdit.hide()
-        self.pushButton_2.hide()
 
-        self.s_name = ""
         self.retranslateUi(Dialog)
         self.pushButton.clicked.connect(self.sendData)
-        # self.pushButton_2.clicked.connect(self.login)
+        self.pushButton_2.clicked.connect(self.login)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
 
@@ -70,70 +58,35 @@ class Ui_Dialog(object):
         return s
 
 
-    def login(self, user):
-        send_data["type"] = "login"
-        send_data["data"] = json.dumps(user)
-        send_data["name"] = user["name"]
+    def login(self):
         self.s = self.socket_init()
         self.thread_init()
-
-    def register_login(self, user):
-        print("register_login")
-        send_data["type"] = "register_login"
-        send_data["data"] = json.dumps(user)
-        send_data["name"] = user["name"]
-        self.s = self.socket_init()
-        self.thread_init()
-        self.Dialog.show()
 
     def thread_init(self):
-        self.s_name = send_data["name"]
-        self.thread = Thread(self.s, json.dumps(send_data))
+        self.thread = Thread(self.s)
         # 如果子线程发射了信号，则执行show_cli_data函数
         self.thread.my_signal.connect(self.show_cli_data)
         self.thread.start()  # 运行线程
 
     def show_cli_data(self, recv_data):
-        print(recv_data)
-        if recv_data["type"] == "login" or recv_data["type"] == "register_login":
-            print(recv_data["name"])
-            print(self.s_name)
-            if recv_data["name"] == self.s_name:
-                self.s_status = recv_data["status"]
-                if recv_data["status"] == 0:
-                    print("login failed")
-                    return
-                else:
-                    print("login success")
-                    self.s_name = recv_data["name"]
-            if recv_data["status"] == 0:
-                return
-            self.textEdit_2.insertPlainText(str(recv_data["name"]) + " 已上线")
-            return
+        if recv_data["type"] == "new":
+            self.textEdit_2.insertPlainText(str(recv_data["addr"]))
         elif recv_data["type"] == "test":
-            data = {"type": "/test"}
-            data["name"] = self.s_name
-            self.s.sendto(bytes(json.dumps(data), encoding="utf8"), (ip, port))
+            self.s.sendto(bytes("/test", encoding="utf8"), (ip, port))
             self.textEdit_2.setText("")
             return
         elif recv_data["type"] == "set":
-            self.textEdit_2.insertPlainText(str(recv_data["name"]))
+            self.textEdit_2.insertPlainText(str(recv_data["addr"]))
             return
-        self.textEdit.insertPlainText(str(recv_data["name"]) + ": " + recv_data["data"] + "\n")
+        self.textEdit.insertPlainText(str(recv_data["addr"]) + recv_data["data"] + "\n")
 
     def sendData(self):
-        send_data = dict()
-        if self.s_status == 0:
-            return
-        send_data["type"] = "msg"
-        send_data["name"] = self.s_name
-        send_data["data"] = self.textEdit_3.toPlainText()
-        self.textEdit_3.clear()
-        self.s.sendto(bytes(json.dumps(send_data), encoding="utf8"), (ip, port))
+        data = self.textEdit_3.toPlainText()
+        self.s.sendto(bytes(data, encoding="utf8"), (ip, port))
 
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
         self.pushButton.setText(_translate("Dialog", "发送"))
-        # self.pushButton_2.setText(_translate("Dialog", "登录"))
+        self.pushButton_2.setText(_translate("Dialog", "登录"))

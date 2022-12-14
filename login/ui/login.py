@@ -9,14 +9,12 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from login.ui import register
 
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog, client):
         Dialog.setObjectName("Dialog")
         Dialog.resize(625, 393)
-        self.Dialog = Dialog
         self.client = client
         self.btn_login = QtWidgets.QPushButton(Dialog)
         self.btn_login.setGeometry(QtCore.QRect(200, 240, 75, 23))
@@ -27,7 +25,6 @@ class Ui_Dialog(object):
         self.line_edit_password = QtWidgets.QLineEdit(Dialog)
         self.line_edit_password.setGeometry(QtCore.QRect(260, 190, 151, 31))
         self.line_edit_password.setObjectName("line_edit_password")
-        self.line_edit_password.setEchoMode(QtWidgets.QLineEdit.Password)
         self.label = QtWidgets.QLabel(Dialog)
         self.label.setGeometry(QtCore.QRect(210, 200, 41, 16))
         self.label.setObjectName("label")
@@ -38,30 +35,13 @@ class Ui_Dialog(object):
         self.line_edit_username.setGeometry(QtCore.QRect(260, 150, 151, 31))
         self.line_edit_username.setObjectName("line_edit_username")
 
-        self.init_register()
-        self.btn_register.clicked.connect(self.show_register)
         self.btn_login.clicked.connect(self.login)
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
-    def show_register(self):
-        self.Dialog.hide()
-        self.register_dlg.show()
-
-    def init_register(self):
-        self.register_dlg = QtWidgets.QDialog()
-        self.register_ui = register.Ui_Dialog()
-        self.register_ui.setupUi(self.register_dlg, self.client)
-        self.register_dlg.hide()
-
     def login(self):
-        user = dict()
-        user["name"] = self.line_edit_username.text()
-        user["password"] = self.line_edit_password.text()
-        self.client.login(user)
-        self.client.Dialog.show()
-        self.Dialog.hide()
+        self.client.show()
 
     def print_log(self):
         print("clicked")
