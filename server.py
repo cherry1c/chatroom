@@ -41,14 +41,14 @@ class Thread(QThread):
             send_data["type"] = "test"
             send_data["addr"] = ""
             send_data["data"] = "!!!!!!!!!"
-            cli_list.clear()
             s.sendto(bytes(json.dumps(send_data), encoding='utf8'), ("<broadcast>", 8888))
             self.my_signal.emit()  # 释放信号
 
 thread = Thread()
 thread.start()  # 运行线程
 
-
+def login():
+    print("login")
 
 while True:
     data, addr = s.recvfrom(1024)
@@ -58,6 +58,9 @@ while True:
         send_data["type"] = "old"
     else:
         send_data["type"] = "new"
+        login()
+        print(cli_list)
+        print(addr)
         cli_list.append(addr)
     if send_data["data"] == "/test":
         send_data["type"] = "set"

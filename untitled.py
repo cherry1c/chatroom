@@ -14,7 +14,7 @@ from MyThread import Thread
 
 ip = "172.20.10.5"
 port = 6666
-selfPort = 8887
+selfPort = 8888
 
 
 class Ui_Dialog(object):
